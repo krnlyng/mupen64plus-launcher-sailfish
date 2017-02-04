@@ -4,6 +4,7 @@
 #include "version.h"
 #include "osal_dynamiclib.h"
 
+#include <cstdlib>
 #include <fstream>
 
 emulator_thread the_emulator_thread;

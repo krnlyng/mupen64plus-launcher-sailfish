@@ -28,9 +28,9 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifdef QT_QML_DEBUG
+#include <cstdlib>
+
 #include <QtQuick>
-#endif
 
 #include <QObject>
 #include <QUrl>
