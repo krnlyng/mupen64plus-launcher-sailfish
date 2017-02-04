@@ -66,7 +66,7 @@ HEADERS += \
     src/settingsmanager.h \
     src/emulator_thread.h
 
-INCLUDEPATH += /usr/include/mupen64plus /usr/include/audioresource-qt
+INCLUDEPATH += ../mupen64plus-core/src/api /usr/include/mupen64plus /usr/include/audioresource-qt
 
 LIBS += -ldl -laudioresource-qt
 
