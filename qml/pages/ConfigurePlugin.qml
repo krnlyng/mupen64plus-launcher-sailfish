@@ -17,13 +17,13 @@ Page {
         var general_settings = settingsManager.getPossibleGeneralSettings(plugin_type)
 
         for(var setting in general_settings) {
-            console.log('###', "possible general setting: " + general_settings[setting] + " " + settingsManager.getSettingType(plugin_type, plugin_name, general_settings[setting]))
+            console.log('###', "possible general setting: " + general_settings[setting] + " " + settingsManager.getGeneralSettingType(plugin_type, general_settings[setting]) + " " + settingsManager.getGeneralSettingValue(plugin_type, plugin_name, general_settings[setting]))
 
             listModel.append({setting_name: general_settings[setting], section: "General", setting_value: settingsManager.getGeneralSettingValue(plugin_type, plugin_name, general_settings[setting]), setting_hint: settingsManager.getGeneralSettingHint(plugin_type, plugin_name, general_settings[setting])})
         }
 
         for(var setting in settings) {
-            console.log('###', "possible setting: " + settings[setting] + " " + settingsManager.getSettingType(plugin_type, plugin_name, settings[setting]))
+            console.log('###', "possible setting: " + settings[setting] + " " + settingsManager.getSettingType(plugin_type, plugin_name, settings[setting]) + " " + settingsManager.getSettingValue(plugin_type, plugin_name, settings[setting]))
 
             listModel.append({setting_name: settings[setting], section: plugin_name, setting_value: settingsManager.getSettingValue(plugin_type, plugin_name, settings[setting]), setting_hint: settingsManager.getSettingHint(plugin_type, plugin_name, settings[setting])})
         }

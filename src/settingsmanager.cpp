@@ -603,34 +603,47 @@ qint32 SettingsManager::saveGeneralSetting(QString plugin_type, QString setting_
         section_name = "Core";
     }
 
+    qDebug(("section name: " + section_name).c_str());
+
     ConfigOpenSection(section_name.c_str(), &section);
     ConfigGetParameterType(section, setting_name.toStdString().c_str(), &type);
     if(M64TYPE_BOOL == type)
     {
-        bool bvalue = (value == "true" || value == "1");
-        ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &value);
+        qDebug("saving boolean value");
+        int bvalue = (value == "true" || value == "1");
+        ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &bvalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
     else if(M64TYPE_FLOAT == type)
     {
+        qDebug("saving float value");
         float fvalue = value.toFloat();
         ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &fvalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
     else if(M64TYPE_INT == type)
     {
+        qDebug("saving int value");
         int ivalue = value.toInt();
         ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &ivalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
     else if(M64TYPE_STRING == type)
     {
+        qDebug("saving string value");
         char *svalue = strdup(value.toStdString().c_str());
         ConfigSetParameter(section, setting_name.toStdString().c_str(), type, svalue);
         free(svalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
-    ConfigSaveSection(section_name.c_str());
+    else
+    {
+        qDebug("unknown setting type");
+    }
 
     return -1;
 }
@@ -685,34 +698,47 @@ qint32 SettingsManager::saveSetting(QString plugin_type, QString plugin_name, QS
         section_name = "Core";
     }
 
+    qDebug(("section name: " + section_name).c_str());
+
     ConfigOpenSection(section_name.c_str(), &section);
     ConfigGetParameterType(section, setting_name.toStdString().c_str(), &type);
     if(M64TYPE_BOOL == type)
     {
-        bool bvalue = (value == "true" || value == "1");
-        ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &value);
+        qDebug("saving boolean value");
+        int bvalue = (value.toLower() == "true" || value == "1");
+        ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &bvalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
     else if(M64TYPE_FLOAT == type)
     {
+        qDebug("saving float value");
         float fvalue = value.toFloat();
         ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &fvalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
     else if(M64TYPE_INT == type)
     {
+        qDebug("saving int value");
         int ivalue = value.toInt();
         ConfigSetParameter(section, setting_name.toStdString().c_str(), type, &ivalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
     else if(M64TYPE_STRING == type)
     {
+        qDebug("saving string value");
         char *svalue = strdup(value.toStdString().c_str());
         ConfigSetParameter(section, setting_name.toStdString().c_str(), type, svalue);
         free(svalue);
+        ConfigSaveSection(section_name.c_str());
         return 0;
     }
-    ConfigSaveSection(section_name.c_str());
+    else
+    {
+        qDebug("unknown setting type");
+    }
 
     return -1;
 }
