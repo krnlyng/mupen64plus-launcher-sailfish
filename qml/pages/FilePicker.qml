@@ -7,7 +7,7 @@ import Sailfish.FileManager 1.0
 
 Page {
     id: page
-    allowedOrientations: Orientation.Portrait
+    allowedOrientations: Orientation.All
 
     property alias path: fileModel.path
     property string homePath

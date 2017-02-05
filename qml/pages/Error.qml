@@ -3,8 +3,9 @@ import Sailfish.Silica 1.0
 
 ConfirmDialog {
     property Item errorMessage
+    allowedOrientations: Orientation.All
 
-    text: errorMessage
+    text: "Error " + errorMessage
     acceptDestination: Component {
         ConfigDialog {
             acceptDestination: gameSelector
