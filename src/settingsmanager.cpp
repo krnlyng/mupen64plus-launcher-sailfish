@@ -452,6 +452,7 @@ QString SettingsManager::getGeneralSettingValue(QString plugin_type, QString plu
 
 QString SettingsManager::getSettingHint(QString plugin_type, QString plugin_name, QString setting_name)
 {
+    m64p_handle section;
     string section_name = "";
 
     if(plugin_type == "video")
@@ -497,36 +498,13 @@ QString SettingsManager::getSettingHint(QString plugin_type, QString plugin_name
         section_name = "Core";
     }
 
-    ifstream in;
-    QString home = qgetenv("HOME");
-    std::string line, previous_line;
-
-    in.open((home.toStdString() + "/.config/mupen64plus/mupen64plus.cfg").c_str());
-    while(getline(in, line))
-    {
-        if(line == "[" + section_name + "]")
-        {
-            while(getline(in, line))
-            {
-                if(line.find(setting_name.toStdString()) == 0)
-                {
-                    // erase "#" and " "
-                    previous_line.erase(0,2);
-                    in.close();
-                    return QString::fromStdString(previous_line);
-                }
-                previous_line = line;
-            }
-            break;
-        }
-    }
-    in.close();
-
-    return "No hint available";
+    ConfigOpenSection(section_name.c_str(), &section);
+    return ConfigGetParameterHelp(section, setting_name.toStdString().c_str());
 }
 
 QString SettingsManager::getGeneralSettingHint(QString plugin_type, QString plugin_name, QString setting_name)
 {
+    m64p_handle section;
     string section_name = "";
 
     if(plugin_type == "video")
@@ -550,30 +528,8 @@ QString SettingsManager::getGeneralSettingHint(QString plugin_type, QString plug
         section_name = "Core";
     }
 
-    ifstream in;
-    QString home = qgetenv("HOME");
-    std::string line, previous_line;
-
-    in.open((home.toStdString() + "/.config/mupen64plus/mupen64plus.cfg").c_str());
-    while(getline(in, line))
-    {
-        if(line == "[" + section_name + "]")
-        {
-            while(getline(in, line))
-            {
-                if(line.find(setting_name.toStdString()) == 0)
-                {
-                    // erase "#" and " "
-                    previous_line.erase(0,2);
-                    in.close();
-                    return QString::fromStdString(previous_line);
-                }
-                previous_line = line;
-            }
-            break;
-        }
-    }
-    in.close();
+    ConfigOpenSection(section_name.c_str(), &section);
+    return ConfigGetParameterHelp(section, setting_name.toStdString().c_str());
 }
 
 qint32 SettingsManager::saveGeneralSetting(QString plugin_type, QString setting_name, QString value)
