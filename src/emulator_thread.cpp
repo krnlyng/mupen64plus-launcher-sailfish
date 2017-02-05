@@ -4,6 +4,10 @@
 #include "version.h"
 #include "osal_dynamiclib.h"
 
+#include <QWindow>
+#include <QGuiApplication>
+#include <QScreen>
+
 #include <cstdlib>
 #include <fstream>
 
@@ -32,6 +36,135 @@ void emulator_thread::set_game(std::string game)
     my_game = game;
 }
 
+m64p_error emulator_thread::VidExtFuncInit(void)
+{
+    return M64ERR_SUCCESS;
+}
+
+m64p_error emulator_thread::VidExtFuncQuit(void)
+{
+    return M64ERR_SUCCESS;
+}
+
+m64p_error emulator_thread::VidExtFuncListModes(m64p_2d_size *, int *)
+{
+}
+
+m64p_error emulator_thread::VidExtFuncSetMode(int a, int b, int c, int d, int e)
+{
+    the_emulator_thread.fmt.setMajorVersion(2);
+    the_emulator_thread.fmt.setMinorVersion(0);
+    the_emulator_thread.fmt.setProfile(QSurfaceFormat::CompatibilityProfile);
+    the_emulator_thread.fmt.setRenderableType(QSurfaceFormat::OpenGLES);
+
+    the_emulator_thread.my_window = new QWindow();
+    the_emulator_thread.my_window->setFormat(the_emulator_thread.fmt);
+    the_emulator_thread.my_window->setSurfaceType(QSurface::OpenGLSurface);
+    the_emulator_thread.my_window->create();
+    the_emulator_thread.my_window->resize(a, b);
+    the_emulator_thread.my_window->show();
+
+    the_emulator_thread.my_render_context = new QOpenGLContext(the_emulator_thread.my_window);
+    the_emulator_thread.my_render_context->setFormat(the_emulator_thread.fmt);
+    the_emulator_thread.my_render_context->create();
+    the_emulator_thread.my_render_context->makeCurrent(the_emulator_thread.my_window);
+
+    qDebug(("Setting mode " + to_string(a) + " " + to_string(b) + " " + to_string(c) + " " + to_string(d) + " " + to_string(e)).c_str());
+    the_emulator_thread.my_window->resize(a, b);
+
+    return M64ERR_SUCCESS;
+}
+
+void *     emulator_thread::VidExtFuncGLGetProc(const char* procName)
+{
+    return (void*)the_emulator_thread.my_render_context->getProcAddress(QString(procName).toLatin1());
+}
+
+m64p_error emulator_thread::VidExtFuncGLSetAttr(m64p_GLattr attr, int value)
+{
+    switch(attr)
+    {
+    case M64P_GL_DEPTH_SIZE:
+        the_emulator_thread.fmt.setDepthBufferSize(value);
+        break;
+    case M64P_GL_RED_SIZE:
+        the_emulator_thread.fmt.setRedBufferSize(value);
+        break;
+    case M64P_GL_GREEN_SIZE:
+        the_emulator_thread.fmt.setGreenBufferSize(value);
+        break;
+    case M64P_GL_BLUE_SIZE:
+        the_emulator_thread.fmt.setBlueBufferSize(value);
+        break;
+    case M64P_GL_ALPHA_SIZE:
+        the_emulator_thread.fmt.setAlphaBufferSize(value);
+        break;
+    case M64P_GL_DOUBLEBUFFER:
+        if(value)
+        {
+            the_emulator_thread.fmt.setSwapBehavior(QSurfaceFormat::DoubleBuffer);
+        }
+        else
+        {
+            the_emulator_thread.fmt.setSwapBehavior(QSurfaceFormat::SingleBuffer);
+        }
+        break;
+    default:
+        qDebug(("set attr unimplemented for: " + to_string(attr) + " value: " + to_string(value)).c_str());
+        return M64ERR_INCOMPATIBLE;
+    }
+    return M64ERR_SUCCESS;
+}
+
+m64p_error emulator_thread::VidExtFuncGLGetAttr(m64p_GLattr attr, int *value)
+{
+    switch(attr)
+    {
+    case M64P_GL_DEPTH_SIZE:
+        *value = the_emulator_thread.fmt.depthBufferSize();
+        break;
+    case M64P_GL_RED_SIZE:
+        *value = the_emulator_thread.fmt.redBufferSize();
+        break;
+    case M64P_GL_GREEN_SIZE:
+        *value = the_emulator_thread.fmt.greenBufferSize();
+        break;
+    case M64P_GL_BLUE_SIZE:
+        *value = the_emulator_thread.fmt.blueBufferSize();
+        break;
+    case M64P_GL_ALPHA_SIZE:
+        *value = the_emulator_thread.fmt.alphaBufferSize();
+        break;
+    default:
+        qDebug(("get attr unimplemented for: " + to_string(attr)).c_str());
+        return M64ERR_INCOMPATIBLE;
+    }
+    return M64ERR_SUCCESS;
+}
+
+m64p_error emulator_thread::VidExtFuncGLSwapBuf(void)
+{
+    if(the_emulator_thread.stopped)
+    {
+        return CoreDoCommand(M64CMD_STOP, 0, NULL);
+    }
+    the_emulator_thread.my_render_context->swapBuffers(the_emulator_thread.my_render_context->surface());
+    return M64ERR_SUCCESS;
+}
+
+m64p_error emulator_thread::VidExtFuncSetCaption(const char *)
+{
+}
+
+m64p_error emulator_thread::VidExtFuncToggleFS(void)
+{
+}
+
+m64p_error emulator_thread::VidExtFuncResizeWindow(int a, int b)
+{
+    the_emulator_thread.my_window->resize(a, b);
+}
+
 void emulator_thread::run()
 {
     stopped = false;
@@ -58,6 +191,23 @@ void emulator_thread::run()
     // read data as a block:
     rom.read(rom_buffer, length);
     rom.close();
+
+    m64p_video_extension_functions vidext = {
+        11,
+        emulator_thread::VidExtFuncInit,
+        emulator_thread::VidExtFuncQuit,
+        emulator_thread::VidExtFuncListModes,
+        emulator_thread::VidExtFuncSetMode,
+        emulator_thread::VidExtFuncGLGetProc,
+        emulator_thread::VidExtFuncGLSetAttr,
+        emulator_thread::VidExtFuncGLGetAttr,
+        emulator_thread::VidExtFuncGLSwapBuf,
+        emulator_thread::VidExtFuncSetCaption,
+        emulator_thread::VidExtFuncToggleFS,
+        emulator_thread::VidExtFuncResizeWindow,
+    };
+
+    CoreOverrideVidExt(&vidext);
 
     err = CoreDoCommand(M64CMD_ROM_OPEN, (int)length, rom_buffer);
 
@@ -132,6 +282,8 @@ void emulator_thread::run()
     CoreShutdown();
     DetachCoreLib();
 
+    delete my_render_context;
+    delete my_window;
     qDebug("game stopped");
     stopped = true;
 }

@@ -5,8 +5,13 @@
 #include <QThread>
 #include <AudioResourceQt>
 
+#include <QWindow>
+#include <QOpenGLContext>
+
 #include <string>
 #include <vector>
+
+#include "core_interface.h"
 
 class emulator_thread : public QThread
 {
@@ -20,7 +25,20 @@ private:
     bool stopped;
     bool audio_resource_acquired;
     AudioResourceQt::AudioResource m_audio_resource;
-protected:
+    QOpenGLContext *my_render_context;
+    QWindow *my_window;
+    QSurfaceFormat fmt;
+    static m64p_error VidExtFuncInit(void);
+    static m64p_error VidExtFuncQuit(void);
+    static m64p_error VidExtFuncListModes(m64p_2d_size *, int *);
+    static m64p_error VidExtFuncSetMode(int, int, int, int, int);
+    static void *     VidExtFuncGLGetProc(const char*);
+    static m64p_error VidExtFuncGLSetAttr(m64p_GLattr, int);
+    static m64p_error VidExtFuncGLGetAttr(m64p_GLattr, int *);
+    static m64p_error VidExtFuncGLSwapBuf(void);
+    static m64p_error VidExtFuncSetCaption(const char *);
+    static m64p_error VidExtFuncToggleFS(void);
+    static m64p_error VidExtFuncResizeWindow(int, int);
     void run();
 public slots:
     void onAcquiredChanged(void);
