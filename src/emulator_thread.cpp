@@ -90,7 +90,7 @@ void emulator_thread::run()
     ptr_PluginStartup PluginStartup;
     ptr_PluginShutdown PluginShutdown;
 
-    err = ConfigOpenSection("mupen64plus-launcher-sailfish", &config_section);
+    err = ConfigOpenSection("UI-Console", &config_section);
 
     qDebug(("config section opened: " + to_string(err)).c_str());
 

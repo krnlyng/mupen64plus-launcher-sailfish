@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
     qDebug(("started core lib, return code: " + to_string(err)).c_str());
 
-    err = ConfigOpenSection("mupen64plus-launcher-sailfish", &config_section);
+    err = ConfigOpenSection("UI-Console", &config_section);
 
     qDebug(("config section opened: " + to_string(err)).c_str());
 
@@ -185,7 +185,7 @@ int main(int argc, char *argv[])
     }
 
     qDebug() << "saving and detaching core";
-    ConfigSaveSection("mupen64plus-launcher-sailfish");
+    ConfigSaveSection("UI-Console");
     ConfigSaveSection("Video-General");
     ConfigSaveFile();
     CoreShutdown();
@@ -215,7 +215,7 @@ int main(int argc, char *argv[])
         qDebug("core was not previously detached. might happen because the app was closed within a sub page");
     }
 
-    err = ConfigOpenSection("mupen64plus-launcher-sailfish", &config_section);
+    err = ConfigOpenSection("UI-Console", &config_section);
 
     qDebug(("config section opened: " + to_string(err)).c_str());
 
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
     }
 
     qDebug() << "saving and detaching core";
-    ConfigSaveSection("mupen64plus-launcher-sailfish");
+    ConfigSaveSection("UI-Console");
     ConfigSaveFile();
     CoreShutdown();
     DetachCoreLib();

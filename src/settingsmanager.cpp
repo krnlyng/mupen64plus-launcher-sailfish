@@ -167,7 +167,7 @@ void SettingsManager::loadSettings()
 
     qDebug(("started core lib, return code: " + to_string(err)).c_str());
 
-    err = ConfigOpenSection("mupen64plus-launcher-sailfish", &config_section);
+    err = ConfigOpenSection("UI-Console", &config_section);
 
     qDebug(("config section opened: " + to_string(err)).c_str());
 }
@@ -177,7 +177,7 @@ void SettingsManager::unloadSettings()
     if(ConfigSaveSection != NULL)
     {
         qDebug("detaching core");
-        ConfigSaveSection("mupen64plus-launcher-sailfish");
+        ConfigSaveSection("UI-Console");
         ConfigSaveFile();
         CoreShutdown();
         DetachCoreLib();
