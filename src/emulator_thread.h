@@ -7,11 +7,14 @@
 
 #include <QWindow>
 #include <QOpenGLContext>
+#include <QProcess>
 
 #include <string>
 #include <vector>
 
 #include "core_interface.h"
+
+#define ATTACH_TO_CORE 0
 
 class emulator_thread : public QThread
 {
@@ -22,26 +25,18 @@ public:
     void set_game(std::string game);
 private:
     std::string my_game;
+    QProcess *game;
     bool stopped;
+#if ATTACH_TO_CORE
     bool audio_resource_acquired;
     AudioResourceQt::AudioResource m_audio_resource;
-    QOpenGLContext *my_render_context;
-    QWindow *my_window;
-    QSurfaceFormat fmt;
-    static m64p_error VidExtFuncInit(void);
-    static m64p_error VidExtFuncQuit(void);
-    static m64p_error VidExtFuncListModes(m64p_2d_size *, int *);
-    static m64p_error VidExtFuncSetMode(int, int, int, int, int);
-    static void *     VidExtFuncGLGetProc(const char*);
-    static m64p_error VidExtFuncGLSetAttr(m64p_GLattr, int);
-    static m64p_error VidExtFuncGLGetAttr(m64p_GLattr, int *);
-    static m64p_error VidExtFuncGLSwapBuf(void);
-    static m64p_error VidExtFuncSetCaption(const char *);
-    static m64p_error VidExtFuncToggleFS(void);
-    static m64p_error VidExtFuncResizeWindow(int, int);
+#endif
+protected:
     void run();
+#if ATTACH_TO_CORE
 public slots:
     void onAcquiredChanged(void);
+#endif
 };
 
 extern emulator_thread the_emulator_thread;
