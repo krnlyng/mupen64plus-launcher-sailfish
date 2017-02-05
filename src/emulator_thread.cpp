@@ -48,7 +48,7 @@ void emulator_thread::run()
     game = new QProcess;
     stopped = false;
 
-    game->start(QString::fromStdString("/usr/bin/mupen64plus " + my_game));
+    game->start(QString::fromStdString((std::string)"/usr/bin/mupen64plus " + "\"" + my_game + "\""));
     while(game->waitForFinished(-1))
     {
         sleep(1);

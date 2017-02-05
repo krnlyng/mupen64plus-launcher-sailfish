@@ -176,7 +176,7 @@ void SettingsManager::unloadSettings()
 {
     if(ConfigSaveSection != NULL)
     {
-        qDebug("detaching core");
+        qDebug("saving and detaching core");
         ConfigSaveSection("UI-Console");
         ConfigSaveFile();
         CoreShutdown();
@@ -576,7 +576,7 @@ QString SettingsManager::getGeneralSettingHint(QString plugin_type, QString plug
     in.close();
 }
 
-qint32 SettingsManager::saveGeneralSetting(QString plugin_type, QString plugin_name, QString setting_name, QString value)
+qint32 SettingsManager::saveGeneralSetting(QString plugin_type, QString setting_name, QString value)
 {
     m64p_handle section;
     m64p_type type;
@@ -630,6 +630,7 @@ qint32 SettingsManager::saveGeneralSetting(QString plugin_type, QString plugin_n
         free(svalue);
         return 0;
     }
+    ConfigSaveSection(section_name.c_str());
 
     return -1;
 }
@@ -711,6 +712,7 @@ qint32 SettingsManager::saveSetting(QString plugin_type, QString plugin_name, QS
         free(svalue);
         return 0;
     }
+    ConfigSaveSection(section_name.c_str());
 
     return -1;
 }

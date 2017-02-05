@@ -51,8 +51,9 @@ DISTFILES += \
     qml/pages/ConfigureRsp.qml \
     qml/pages/ConfigureInput.qml \
     qml/pages/ConfigureAudio.qml \
-    qml/pages/ConfigureVideo.qml \
-    qml/pages/ConfigureCore.qml
+    qml/pages/ConfigureCore.qml \
+    qml/pages/ConfigurePlugin.qml \
+    qml/pages/ConfigureVideo.qml
 
 HEADERS += \
     src/gamelauncher.h \

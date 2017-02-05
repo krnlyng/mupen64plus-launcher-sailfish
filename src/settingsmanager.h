@@ -32,7 +32,7 @@ public slots:
     QString getSettingHint(QString plugin_type, QString , QString setting);
     QString getGeneralSettingHint(QString plugin_type, QString plugin_name, QString setting);
     qint32 saveSetting(QString plugin_type, QString plugin_name, QString setting, QString value);
-    qint32 saveGeneralSetting(QString plugin_type, QString plugin_name, QString setting, QString value);
+    qint32 saveGeneralSetting(QString plugin_type, QString setting, QString value);
     qint32 pluginCount(QString plugin_type);
     QString getPlugin(QString plugin_type, qint32 plugin_num);
     void selectPlugin(QString plugin_type, qint32 plugin_num);
