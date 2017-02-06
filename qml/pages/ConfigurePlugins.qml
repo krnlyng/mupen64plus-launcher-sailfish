@@ -117,7 +117,7 @@ Page {
 
     Timer {
         id: timer
-        interval: 5000
+        interval: 10000
         repeat: false
         running: true
     }
