@@ -20,6 +20,7 @@ public:
 public slots:
     qint32 launchGame(QUrl str);
     qint32 checkActive();
+    qint32 stopGame();
 };
 
 #endif // GAMELAUNCHER_H

@@ -16,7 +16,7 @@
 <context>
     <name>Cover</name>
     <message>
-        <source>Mupen64plus Launcher</source>
+        <source>mupen64plus</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

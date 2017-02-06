@@ -16,6 +16,7 @@ GameLauncher::GameLauncher()
 
 qint32 GameLauncher::launchGame(QUrl fileurl)
 {
+    the_emulator_thread.acquire_audio();
     the_emulator_thread.set_game(fileurl.path().toStdString());
     the_emulator_thread.start();
 }
@@ -23,4 +24,9 @@ qint32 GameLauncher::launchGame(QUrl fileurl)
 qint32 GameLauncher::checkActive()
 {
     return the_emulator_thread.isRunning();
+}
+
+qint32 GameLauncher::stopGame()
+{
+    the_emulator_thread.stop();
 }

@@ -23,6 +23,7 @@ public:
     emulator_thread();
     void stop();
     void set_game(std::string game);
+    void acquire_audio();
 private:
     std::string my_game;
     QProcess *game;

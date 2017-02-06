@@ -60,3 +60,8 @@ qint32 RecentsHandler::removeRecentGame(QUrl game)
     qDebug("Didn't remove recent game");
     return -1;
 }
+
+QUrl RecentsHandler::getMostRecent()
+{
+    return QUrl::fromUserInput(QString::fromStdString(*recent_games.begin()));
+}

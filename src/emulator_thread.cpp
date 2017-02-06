@@ -28,18 +28,25 @@ emulator_thread::emulator_thread() : stopped(true)
 void emulator_thread::stop()
 {
     stopped = true;
+    if(game)
+    {
+        game->kill();
+    }
     this->wait();
 }
 
 void emulator_thread::set_game(std::string tgame)
+{
+    my_game = tgame;
+}
+
+void emulator_thread::acquire_audio()
 {
 #if ATTACH_TO_CORE
     QObject::connect(&m_audio_resource, SIGNAL(acquiredChanged()),
                          this, SLOT(onAcquiredChanged()));
     m_audio_resource.acquire();
 #endif
-
-    my_game = tgame;
 }
 
 void emulator_thread::run()

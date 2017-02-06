@@ -20,6 +20,7 @@ public slots:
     qint32 addRecentGame(QUrl game);
 
     QVariantList getRecentGames();
+    QUrl getMostRecent();
 
     qint32 removeRecentGame(QUrl game);
 };

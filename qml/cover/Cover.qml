@@ -35,17 +35,37 @@ CoverBackground {
     Label {
         id: label
         anchors.centerIn: parent
-        text: qsTr("Mupen64plus Launcher")
+        text: qsTr("mupen64plus")
     }
 
     CoverActionList {
-        id: coverAction
-
-        /*
         CoverAction {
-            iconSource: "image://theme/icon-cover-next"
-            onTriggered: gameLauncher.launchGame(game.text)
-        }*/
+            id: coverAction
+            iconSource: "image://theme/icon-cover-play"
+            onTriggered: {
+                if(!gameLauncher.checkActive())
+                {
+                    gameLauncher.launchGame(recentsHandler.getMostRecent())
+                    coverAction.iconSource = "image://theme/icon-cover-cancel"
+                }
+                else
+                {
+                    gameLauncher.stopGame()
+                    coverAction.iconSource = "image://theme/icon-cover-play"
+                }
+            }
+        }
+    }
+
+    onVisibleChanged: {
+        if(gameLauncher.checkActive())
+        {
+            coverAction.iconSource = "image://theme/icon-cover-cancel"
+        }
+        else
+        {
+            coverAction.iconSource = "image://theme/icon-cover-play"
+        }
     }
 }
 

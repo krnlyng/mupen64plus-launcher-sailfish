@@ -235,16 +235,36 @@ Page {
         anchors.centerIn: parent
         running: gameLauncher.checkActive()
     }
+
     InfoLabel {
         id: infoLabel
         text: "Game is active"
         visible: false
     }
 
-    onVisibleChanged: {
-        console.log("###", 'visible changed')
+    Timer {
+        id: busyTimer
+        running: false
+        repeat: false
+        interval: 1000
+        onTriggered: {
+            update_busy_status()
+        }
+    }
+
+    function update_busy_status()
+    {
         busyIndicator.running = gameLauncher.checkActive()
         infoLabel.visible = busyIndicator.running
         listView.visible = !busyIndicator.running
+        if(busyIndicator.running)
+        {
+            busyTimer.start()
+        }
+    }
+
+    onVisibleChanged: {
+        console.log("###", 'visible changed')
+        update_busy_status()
     }
 }
