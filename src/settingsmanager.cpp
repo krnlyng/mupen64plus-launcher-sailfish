@@ -48,7 +48,7 @@ QString SettingsManager::getCurrentPlugin(QString type)
     }
     else if(type == "audio")
     {
-        return "sdl";
+        return "sdl-audio";
     }
     else if(type == "input")
     {
@@ -69,7 +69,7 @@ QString SettingsManager::getCurrentPlugin(QString type)
     }
     else if(type == "rsp")
     {
-        return "rsp";
+        return "hle";
     }
     else if(type == "core")
     {
