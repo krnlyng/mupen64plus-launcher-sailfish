@@ -57,15 +57,31 @@ CoverBackground {
         }
     }
 
-    onVisibleChanged: {
+    Timer {
+        id: busyTimer
+        running: false
+        repeat: false
+        interval: 1000
+        onTriggered: {
+            update_busy_status()
+        }
+    }
+
+    function update_busy_status()
+    {
         if(gameLauncher.checkActive())
         {
             coverAction.iconSource = "image://theme/icon-cover-cancel"
+            busyTimer.start()
         }
         else
         {
             coverAction.iconSource = "image://theme/icon-cover-play"
         }
+    }
+
+    onVisibleChanged: {
+        update_busy_status()
     }
 }
 
