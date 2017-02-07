@@ -66,6 +66,7 @@ Page {
         {
             addRecent(filename, basename)
         }
+        update_busy_status()
     }
 
     function removeRecentROM(filename)
