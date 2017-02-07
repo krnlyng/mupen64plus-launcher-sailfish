@@ -67,6 +67,7 @@ Page {
                 Label {
                     id: selectedPlugin
                     anchors.verticalCenter: parent.verticalCenter
+                    color: Theme.highlightColor
 
                     text: {
                         var plug = settingsManager.getCurrentPlugin(plugin_type)
